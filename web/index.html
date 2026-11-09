@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="inventario-token" content="__INV_TOKEN__">
+<title>Recambios · Programa independiente</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="toolbar">
+    <div class="brand"><span class="brand-icon">▤</span><div class="brand-name"><strong>Recambios</strong><span class="brand-divider">/</span><span class="active-inventory-name" id="currentInventoryLabel">SIN INVENTARIO</span></div><span class="counter toolbar-counter" id="itemCount">0 piezas</span></div>
+    <div class="toolbar-actions">
+      <button class="btn subtle" id="manageInventories" type="button">▤ Inventarios</button>
+      <button class="btn subtle" id="backupBtn" type="button">↧ Copia de seguridad</button>
+      <button class="btn primary" id="addBtn" type="button">＋ Nuevo recambio</button>
+      <button class="suite-back" id="goBack" type="button">⏻ Cerrar programa</button>
+    </div>
+  </header>
+  <div class="page">
+    <section class="list-panel" aria-label="Listado de recambios">
+      <div class="searchbox"><span class="search-icon">⌕</span><input id="search" type="search" placeholder="Buscar descripción, marca, referencia…" autocomplete="off" aria-label="Buscar recambios"></div>
+      <select id="categoryFilter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
+      <div class="results-info" id="resultsInfo">Cargando catálogo…</div>
+      <div class="items" id="items" role="list"></div>
+    </section>
+    <main class="detail-panel" id="detailPanel" aria-label="Detalle del recambio">
+      <div class="empty" id="emptyDetail"><span class="empty-icon">▤</span><h2 id="emptyTitle">Selecciona un recambio</h2><p id="emptyText">Haz clic en una pieza de la lista para ver su fotografía, referencias y enlaces de compra.</p><button type="button" class="btn primary" id="emptyAdd">＋ Añadir recambio</button></div>
+      <div id="itemDetail" class="hidden">
+        <div class="detail-top"><span class="eyebrow">FICHA DEL RECAMBIO</span><div class="detail-tools"><button class="btn subtle" id="editBtn" type="button">✎ Editar</button><button class="btn danger" id="deleteBtn" type="button">Eliminar</button></div></div>
+        <div class="hero"><img id="detailPhoto" alt="Fotografía del recambio" class="hidden"><div class="no-photo hidden" id="detailNoPhoto">▧<span>Sin fotografía</span></div></div>
+        <div class="detail-text"><span class="chip" id="detailCategory"></span><h2 id="detailTitle"></h2><p id="detailDescription"></p></div>
+        <div class="facts"><div><small>MARCA</small><strong id="detailBrand">—</strong></div><div><small>REFERENCIA FABRICANTE</small><strong id="detailRef">—</strong></div><div><small>CÓDIGO DE TIENDA</small><strong id="detailStoreRef">—</strong></div></div>
+        <div class="buy-heading"><strong>Dónde comprar</strong><button id="searchWeb" class="btn subtle small" type="button">⌕ Buscar por referencia</button></div>
+        <div id="shopLinks" class="shop-links"></div>
+        <section class="notes hidden" id="notesSection"><strong>Observaciones</strong><p id="detailNotes"></p></section>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="overlay hidden" id="overlay" role="presentation">
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <header class="dialog-head"><div><div class="eyebrow">RECAMBIOS / <span id="dialogInventoryLabel">SIN INVENTARIO</span></div><h2 id="dialogTitle">Nuevo recambio</h2></div><button id="closeDialog" type="button" class="close" aria-label="Cerrar formulario">×</button></header>
+    <form id="itemForm" novalidate>
+      <div class="dialog-scroll">
+        <div class="import-box"><div class="import-title"><strong>Importar desde una tienda</strong><span class="hint">Opcional</span></div><p>Pega el enlace de un producto e intentaremos obtener sus datos y fotografía. Revisa los campos antes de guardar.</p><div class="import-row"><input id="importUrl" type="url" placeholder="https://www.tienda.com/producto…" aria-label="URL de producto para importar"><button id="importBtn" type="button" class="btn primary">Importar enlace</button></div><div id="importMessage" class="msg" role="status"></div></div>
+        <div class="form-layout">
+          <div class="fields">
+            <label>Descripción / nombre de la pieza <span class="required">*</span><input name="titulo" required maxlength="200" placeholder="Ej. Brazo superior delantero F110 SF2"></label>
+            <div class="field-pair"><label>Marca<input name="marca" maxlength="80" placeholder="Serpent"></label><label>Categoría<input name="categoria" maxlength="100" list="suggestions" placeholder="Dirección y suspensión"></label></div>
+            <datalist id="suggestions"><option>Dirección y suspensión</option><option>Transmisión</option><option>Chasis</option><option>Ruedas y neumáticos</option><option>Carrocería</option><option>Electrónica</option><option>Tornillería</option><option>Otros</option></datalist>
+            <div class="field-pair"><label>Referencia del fabricante<input name="referencia" maxlength="80" placeholder="411336"></label><label>Referencia de tienda<input name="referencia_tienda" maxlength="80" placeholder="03-411336"></label></div>
+            <label>Descripción adicional<textarea name="descripcion" rows="2" maxlength="2000" placeholder="Características, compatibilidad, contenido del paquete…"></textarea></label>
+          </div>
+          <div class="photo-field"><div class="photo-label">FOTOGRAFÍA</div><div class="photo-preview"><img id="formPhoto" class="hidden" alt="Vista previa de fotografía"><div id="formNoPhoto" class="form-no-photo">▧<small>Sin fotografía</small></div></div><button id="choosePhoto" class="btn subtle full" type="button">▣ Seleccionar imagen</button><button id="removePhoto" class="btn linkish full" type="button">Quitar fotografía</button><input id="photoFile" type="file" accept="image/jpeg,image/png,image/webp" hidden><small class="photo-hint">JPG, PNG o WebP · Máximo 4 MB</small></div>
+        </div>
+        <div class="shop-edit"><div class="import-title"><strong>Tiendas y enlaces de compra</strong><button type="button" id="addShop" class="btn subtle small">＋ Añadir tienda</button></div><div id="shopFields"></div></div>
+        <label class="notes-field">Observaciones personales<textarea name="observaciones" rows="2" maxlength="2000" placeholder="Ej. Verificar medidas antes de comprar…"></textarea></label>
+      </div>
+      <footer class="dialog-footer"><div class="msg" id="formMessage" role="status"></div><button type="button" class="btn subtle" id="cancelBtn">Cancelar</button><button type="submit" class="btn primary" id="saveBtn">Guardar recambio</button></footer>
+    </form>
+  </section>
+</div>
+
+<div class="overlay hidden" id="inventoryOverlay" role="presentation">
+  <section class="dialog dialog-inventory" role="dialog" aria-modal="true" aria-labelledby="inventoryDialogTitle">
+    <header class="dialog-head"><div><div class="eyebrow">MIS INVENTARIOS</div><h2 id="inventoryDialogTitle">Gestionar inventarios</h2></div><button id="closeInventoryDialog" type="button" class="close" aria-label="Cerrar inventarios">×</button></header>
+    <div class="dialog-scroll inventory-scroll">
+      <div class="inventory-layout">
+        <div class="inventory-column">
+          <div class="inventory-subtitle">Selecciona un inventario</div>
+          <div id="inventoryList" class="inventory-list"></div>
+        </div>
+        <div class="inventory-column inventory-actions-panel">
+          <div class="inventory-subtitle">Nombre</div>
+          <input id="inventoryName" type="text" maxlength="60" placeholder="Ej. Pro10, F1, Touring…">
+          <div class="inventory-current" id="inventoryCurrentText">Inventario actual: —</div>
+          <div class="inventory-buttons">
+            <button type="button" class="btn primary" id="openInventoryBtn">Abrir inventario</button>
+            <button type="button" class="btn subtle" id="newInventoryBtn">Crear inventario</button>
+            <button type="button" class="btn subtle" id="renameInventoryBtn">Renombrar seleccionado</button>
+            <button type="button" class="btn danger" id="deleteInventoryBtn">Eliminar seleccionado</button>
+            <button type="button" class="btn subtle" id="restoreBackupBtn">↥ Cargar copia guardada (.zip)</button>
+            <input type="file" id="restoreBackupFile" accept=".zip,application/zip" hidden>
+          </div>
+          <div class="msg" id="inventoryMessage" role="status"></div>
+        </div>
+      </div>
+    </div>
+    <footer class="dialog-footer"><button type="button" class="btn subtle" id="closeInventoryFooter">Cerrar</button></footer>
+  </section>
+</div>
+
+
+<div class="overlay hidden" id="restoreOverlay" role="presentation">
+  <section class="dialog restore-dialog" role="dialog" aria-modal="true" aria-labelledby="restoreDialogTitle">
+    <header class="dialog-head"><div><div class="eyebrow">RECUPERAR COPIA DE SEGURIDAD</div><h2 id="restoreDialogTitle">Elegir cómo recuperar</h2></div><button id="restoreClose" type="button" class="close" aria-label="Cancelar recuperación">×</button></header>
+    <div class="dialog-scroll">
+      <p class="restore-description" id="restoreFilename"></p>
+      <div id="restoreChoices" class="restore-list"></div>
+      <div class="msg" id="restoreMessage" role="status"></div>
+    </div>
+    <footer class="dialog-footer"><button type="button" class="btn subtle" id="restoreCancel">Cancelar</button><button type="button" class="btn primary" id="restoreConfirm">Recuperar inventarios</button></footer>
+  </section>
+</div>
+
+<script src="/app.js" defer></script>
+</body>
+</html>

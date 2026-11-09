@@ -1,0 +1,30 @@
+RECAMBIOS V0.2.6 — PROGRAMA INDEPENDIENTE
+=========================================
+
+Para crear el instalador Windows con ventana WebView2, utiliza:
+   CREAR_INSTALADOR_WINDOWS.bat
+Y sigue las instrucciones detalladas de LEEME_INSTALADOR_WINDOWS.txt.
+
+Este ZIP contiene también el programa portátil con Iniciar_Recambios.bat
+(que utiliza Python y navegador), únicamente como método alternativo de prueba.
+El programa INSTALADO abre una ventana propia WebView2 sin pestañas.
+
+No modifica ni utiliza Suite Visor_Vector.
+Mantiene los inventarios, piezas, fotos, referencias, enlaces, copia y
+restauración de seguridad, y preparado para control de cantidades futuro.
+Los datos del programa instalado se guardan en %LOCALAPPDATA%\Recambios\Datos\.
+
+NOVEDAD V0.2.6 — INICIO SIN INVENTARIOS
+- Una instalación completamente nueva empieza sin ningún inventario, ni Pro10.
+- En el primer arranque se abre la gestión de inventarios, donde escribir un
+  nombre y pulsar «Crear inventario». No se crea nada automáticamente.
+- Se pueden crear varios inventarios y eliminar incluso el último.
+- Si actualizas una instalación que ya tiene inventarios, NO se borran.
+  Para empezar desde cero debes eliminarlos explícitamente desde el gestor
+  o iniciar la instalación usando otra carpeta de datos.
+
+NOVEDADES V0.2.6
+- La ventana de WebView2 abre maximizada.
+- Recuperar ZIP respeta nombres originales; en coincidencias exige elegir
+  Sobrescribir (con copia preventiva) o Cambiar nombre.
+- No se borran inventarios de una instalación anterior al actualizar.

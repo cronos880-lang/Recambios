@@ -1,0 +1,159 @@
+RECAMBIOS V0.2.6 — INSTALADOR WINDOWS CON WEBVIEW2
+===================================================
+
+ENTREGA: CODIGO FUENTE COMPLETO + PREPARACION PARA COMPILAR EN WINDOWS.
+Este ZIP NO es un ejecutable Windows ya compilado. Debes generar el instalador
+EN TU PROPIO PC WINDOWS, tal como se ha hecho con Vectorizador.
+No modifica ni utiliza la Suite Visor_Vector.
+
+1. QUE CAMBIA
+-------------
+- Recambios se abre como una VENTANA PROPIA de Windows, sin pestañas ni barra de
+  direcciones de Chrome o Edge. El contenedor de ventana es pywebview, con el
+  motor Microsoft Edge WebView2 obligatorio (no utiliza MSHTML como sustituto).
+- No es necesario instalar Microsoft Edge como navegador ni Chrome.
+- WebView2 Runtime es un componente distinto del navegador Edge. El instalador
+  comprueba si ya existe y, si falta, ejecuta la instalación oficial Microsoft.
+- El botón «Cerrar programa» y la X de la ventana cierran la aplicación local.
+- Los enlaces de compra se siguen abriendo en el navegador habitual del usuario.
+- El botón «Copia de seguridad» muestra un cuadro nativo para guardar un ZIP.
+- Se mantienen los inventarios múltiples, fotos, enlaces, recuperación y búsqueda.
+
+2. QUE NECESITAS PARA COMPILAR EN WINDOWS
+----------------------------------------
+- Windows 10/11 de 64 bits.
+- Python 3.11 o 3.12 de 64 bits recomendado, SOLO para compilar.
+  https://www.python.org/downloads/windows/
+- Inno Setup 6 instalado, gratuito: https://jrsoftware.org/isinfo.php
+- Acceso a Internet durante la creación del instalador para descargar las
+  herramientas y el instalador oficial de WebView2 Runtime.
+
+3. CREAR INSTALADOR
+-------------------
+1) Descomprime el ZIP COMPLETO en una carpeta normal (por ejemplo, Documentos).
+2) Dentro de la carpeta Recambios, haz doble clic en:
+       CREAR_INSTALADOR_WINDOWS.bat
+3) El proceso crea un entorno .build_venv e instala en él PyInstaller y
+   pywebview (con pythonnet). No instala esos paquetes globalmente.
+4) Compila el programa como EXE --onedir, sin UPX y sin consola.
+5) Descarga el Evergreen Bootstrapper de WebView2 directamente desde Microsoft
+   y comprueba su firma digital antes de incluirlo en el instalador.
+6) Inno Setup prepara el instalador en:
+
+   salida_instalador\Recambios_Instalador_V0_2_6_WebView2_Maximizado_Restauracion_Windows.exe
+
+   También queda el ejecutable portable en:
+   dist\Recambios\Recambios.exe
+   Para mover el portable debes copiar la carpeta dist\Recambios completa.
+
+7) Instala el programa ejecutando el EXE de salida_instalador.
+8) Cuando termine, lo encontrarás en Inicio -> Recambios. Podrás añadir un
+   acceso directo al escritorio durante la instalación.
+
+El programa INSTALADO NO necesita tener Python en el ordenador.
+
+4. WEBVIEW2: QUE OCURRE SI NO ESTA INSTALADO
+-------------------------------------------
+- Al instalar Recambios, Inno Setup comprueba las claves de registro oficiales
+  de Microsoft WebView2 Runtime (instalación por usuario o por máquina).
+- Si está presente, NO se vuelve a instalar.
+- Si falta, ejecuta el bootstrapper oficial de Microsoft con /silent /install.
+- WebView2 Runtime es compartido y se actualiza por los canales de Microsoft.
+- El instalador requiere conexión a Internet si falta el Runtime: el
+  bootstrapper descarga el componente adecuado para el ordenador.
+- Si se bloquea su instalación por red o políticas del equipo, puedes
+  descargar el instalador completo «Evergreen Standalone Installer» desde:
+       https://developer.microsoft.com/microsoft-edge/webview2/
+  Instálalo manualmente y vuelve a abrir Recambios.
+- El programa NO abre Chrome ni Edge como alternativa si falta WebView2.
+
+5. DONDE SE GUARDAN LOS INVENTARIOS
+----------------------------------
+La edición instalada guarda TODOS tus inventarios separados del programa en:
+
+  %LOCALAPPDATA%\Recambios\Datos\
+     inventario.sqlite3
+     Fotos\
+
+Los datos NO están en Program Files ni en la carpeta del instalador.
+Las actualizaciones y la desinstalación NO eliminan esta carpeta.
+La carpeta de perfil WebView2 está separada: %LOCALAPPDATA%\Recambios\WebView2\.
+
+6. SI YA TIENES INVENTARIOS DE LA VERSION ANTERIOR
+-------------------------------------------------
+A) SI YA USASTE EL INSTALADOR V0.2.2:
+   El nuevo instalador conserva AppId y la misma carpeta de Datos. Deberías
+   encontrar tus inventarios al actualizar. Haz antes una copia de seguridad.
+
+B) SI USABAS LA VERSION PORTATIL CON .BAT:
+   1. Abre la versión antigua. Pulsa «Copia de seguridad».
+   2. Guarda el ZIP en Documentos, fuera de la carpeta del programa antiguo.
+   3. Instala Recambios WebView2.
+   4. En «Inventarios», pulsa «Cargar copia guardada (.zip)».
+   5. Selecciona el ZIP y recupera las piezas en un inventario nuevo, sin
+      reemplazar los actuales. Puedes renombrarlo desde «Inventarios».
+
+   También puedes migrar manualmente Datos, con ambas aplicaciones cerradas,
+   pero no mezcles carpetas de Datos distintas ni sobreescribas sin copia.
+
+7. SEGURIDAD Y AVISOS DE WINDOWS
+-------------------------------
+- PyInstaller --onedir --noupx y compilación en Windows reducen ciertas
+  incidencias con antivirus, pero NO eliminan todas las falsas detecciones.
+- El instalador que crees NO estará firmado: Windows SmartScreen puede mostrar
+  «Editor desconocido» o advertencias de reputación.
+- No desactives Defender. Para distribuir el programa, conviene firmarlo
+  digitalmente con un certificado de editor de confianza.
+- Solo el bootstrapper de WebView2 se descarga desde Microsoft y se exige
+  que Windows valide su firma. Nunca se ejecuta un componente descargado sin
+  superar esa comprobación en el proceso normal de compilación.
+- El servidor del catálogo escucha solo en 127.0.0.1 (tu propio equipo).
+
+8. CORRECCIÓN DEL BLOQUEO DE V0.2.3
+---------------------------------
+- La versión 0.2.3 exponía la ventana WinForms al puente JavaScript de
+  pywebview mediante un atributo público; eso puede provocar recursión y
+  bloquear la aplicación antes de cargar la pantalla.
+- V0.2.6 utiliza un atributo privado y restringe las propiedades del puente.
+- Al actualizar NO se borra Datos ni el perfil WebView2 existente.
+- Antes de instalar V0.2.6, CIERRA V0.2.3 (si está bloqueada, finaliza
+  "Recambios.exe" desde el Administrador de tareas de Windows).
+- Si persiste la lentitud, envía los archivos de registro
+  %LOCALAPPDATA%\Recambios\arranque.log y errores.log.
+
+9. SOLUCIÓN DE PROBLEMAS
+-----------------------
+- Si la compilación falla, envía una captura del mensaje de la ventana negra.
+- Si falta Inno Setup, instálalo y vuelve a ejecutar el BAT.
+- Si falla la descarga de WebView2, descarga el «Evergreen Bootstrapper» desde
+  la web oficial y guárdalo en la carpeta prerequisitos con el nombre
+  MicrosoftEdgeWebView2Setup.exe. El script comprobará su firma al reintentar.
+- Si el programa se instala pero no abre, consulta:
+  %LOCALAPPDATA%\Recambios\errores.log
+- Si no aparece una ventana al volver a hacer doble clic, comprueba si ya
+  existe una ventana Recambios abierta en la barra de tareas.
+- En algunos equipos podría ser necesario tener instalados los componentes
+  .NET recomendados por pywebview; Windows 10/11 normalmente incluyen lo
+  necesario para usar el motor WinForms/WebView2.
+
+NOTA: esta entrega ha sido comprobada por inspección y con pruebas de API
+local en Linux; la creación real del .exe, el instalador, la comprobación de
+WebView2 y el funcionamiento gráfico nativo requieren ejecución en Windows.
+
+NOVEDAD V0.2.6
+- El arranque limpio no crea «Pro10» ni ningún otro inventario.
+- El usuario crea y da nombre al primero.
+- Las actualizaciones conservan los inventarios de versiones anteriores.
+  Desinstalar/reinstalar no borra automáticamente AppData\Local\Recambios\Datos.
+
+NOVEDADES V0.2.6
+----------------
+- La ventana de Recambios se abre maximizada (no pantalla completa).
+- Al importar un ZIP se mantienen los nombres originales.
+- Si un nombre ya existe, se ofrece sobrescribir ese inventario o cambiar el
+  nombre del inventario importado, con confirmación explícita.
+- Al sobrescribir, se guarda primero una copia de seguridad completa en
+  %LOCALAPPDATA%\Recambios\Datos\Copias_antes_de_sobrescribir.
+- No se mezclan datos de inventarios distintos ni se añade (recuperado).
+- Los inventarios existentes y fotografías se conservan en las actualizaciones.
+- No se ha probado el EXE nativo en Windows dentro de este entorno.
