@@ -1,0 +1,25 @@
+# Inventarios y datos personales
+**/Datos/
+**/Inventarios/
+**/Copias_seguridad/
+**/Copias_antes_de_sobrescribir/
+*.db
+*.sqlite
+*.sqlite3
+*.zip
+
+# Archivos privados
+.env
+.env.*
+*.log
+
+# Archivos temporales
+__pycache__/
+*.pyc
+.venv/
+
+# Compilaciones
+build/
+dist/
+*.spec
+*.exe
