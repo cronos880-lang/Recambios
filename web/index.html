@@ -10,6 +10,10 @@
 <div class="app">
   <header class="toolbar">
     <div class="brand"><span class="brand-icon">▤</span><div class="brand-name"><strong>Recambios</strong><span class="brand-divider">/</span><span class="active-inventory-name" id="currentInventoryLabel">SIN INVENTARIO</span></div><span class="counter toolbar-counter" id="itemCount">0 piezas</span></div>
+    <nav class="main-tabs" aria-label="Secciones">
+      <button class="main-tab active" id="tabRecambios" type="button">▤ Recambios</button>
+      <button class="main-tab" id="tabMisListas" type="button">☷ Mis Listas</button>
+    </nav>
     <div class="toolbar-actions">
       <button class="btn subtle" id="manageInventories" type="button">▤ Inventarios</button>
       <button class="btn subtle" id="backupBtn" type="button">↧ Copia de seguridad</button>
@@ -17,7 +21,7 @@
       <button class="suite-back" id="goBack" type="button">⏻ Cerrar programa</button>
     </div>
   </header>
-  <div class="page">
+  <div class="page" id="catalogPage">
     <section class="list-panel" aria-label="Listado de recambios">
       <div class="searchbox"><span class="search-icon">⌕</span><input id="search" type="search" placeholder="Buscar descripción, marca, referencia…" autocomplete="off" aria-label="Buscar recambios"></div>
       <select id="categoryFilter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
@@ -27,7 +31,7 @@
     <main class="detail-panel" id="detailPanel" aria-label="Detalle del recambio">
       <div class="empty" id="emptyDetail"><span class="empty-icon">▤</span><h2 id="emptyTitle">Selecciona un recambio</h2><p id="emptyText">Haz clic en una pieza de la lista para ver su fotografía, referencias y enlaces de compra.</p><button type="button" class="btn primary" id="emptyAdd">＋ Añadir recambio</button></div>
       <div id="itemDetail" class="hidden">
-        <div class="detail-top"><span class="eyebrow">FICHA DEL RECAMBIO</span><div class="detail-tools"><button class="btn subtle" id="editBtn" type="button">✎ Editar</button><button class="btn danger" id="deleteBtn" type="button">Eliminar</button></div></div>
+        <div class="detail-top"><span class="eyebrow">FICHA DEL RECAMBIO</span><div class="detail-tools"><button class="btn primary" id="addToListFromCatalog" type="button">＋ A Mis Listas</button><button class="btn subtle" id="editBtn" type="button">✎ Editar</button><button class="btn danger" id="deleteBtn" type="button">Eliminar</button></div></div>
         <div class="hero"><img id="detailPhoto" alt="Fotografía del recambio" class="hidden"><div class="no-photo hidden" id="detailNoPhoto">▧<span>Sin fotografía</span></div></div>
         <div class="detail-text"><span class="chip" id="detailCategory"></span><h2 id="detailTitle"></h2><p id="detailDescription"></p></div>
         <div class="facts"><div><small>MARCA</small><strong id="detailBrand">—</strong></div><div><small>REFERENCIA FABRICANTE</small><strong id="detailRef">—</strong></div><div><small>CÓDIGO DE TIENDA</small><strong id="detailStoreRef">—</strong></div></div>
@@ -37,6 +41,26 @@
       </div>
     </main>
   </div>
+  <div class="page hidden" id="listsPage">
+    <section class="list-panel shopping-sidebar" aria-label="Mis listas de compra">
+      <div class="list-title-row"><strong>Mis Listas</strong><button class="btn primary small" id="newListBtn" type="button">＋ Nueva lista</button></div>
+      <div class="results-info">Selecciona una lista para ver sus piezas</div>
+      <div id="shoppingLists" class="items shopping-list-nav"></div>
+      <div class="shopping-sidebar-footer">Las listas son independientes de los catálogos de recambios.</div>
+    </section>
+    <main class="detail-panel shopping-content" aria-label="Detalle de lista de compra">
+      <div id="shoppingEmpty" class="empty"><span class="empty-icon">☷</span><h2>Mis Listas</h2><p>Crea una lista y añade piezas de cualquiera de tus catálogos.</p><button class="btn primary" id="shoppingEmptyCreate" type="button">＋ Crear primera lista</button></div>
+      <div id="shoppingDetails" class="hidden">
+        <div class="shopping-detail-header">
+          <div><div class="eyebrow">LISTA DE COMPRA</div><h2 id="shoppingTitle"></h2><span id="shoppingCount" class="shopping-muted"></span></div>
+          <div class="shopping-detail-actions"><button class="btn subtle" id="renameListBtn" type="button">✎ Renombrar</button><button class="btn danger" id="deleteListBtn" type="button">Eliminar lista</button></div>
+        </div>
+        <div class="shopping-actions"><button class="btn primary" id="addFromCatalogBtn" type="button">＋ Añadir desde catálogos</button><span class="shopping-muted">Solo aquí se indican cantidades a comprar.</span></div>
+        <div id="shoppingLines" class="shopping-lines"></div>
+      </div>
+    </main>
+  </div>
+
 </div>
 
 <div class="overlay hidden" id="overlay" role="presentation">
@@ -101,7 +125,41 @@
       <div id="restoreChoices" class="restore-list"></div>
       <div class="msg" id="restoreMessage" role="status"></div>
     </div>
-    <footer class="dialog-footer"><button type="button" class="btn subtle" id="restoreCancel">Cancelar</button><button type="button" class="btn primary" id="restoreConfirm">Recuperar inventarios</button></footer>
+    <footer class="dialog-footer"><button type="button" class="btn subtle" id="restoreCancel">Cancelar</button><button type="button" class="btn primary" id="restoreConfirm">Recuperar copia</button></footer>
+  </section>
+</div>
+
+
+<div class="overlay hidden" id="listNameOverlay">
+  <section class="dialog small-dialog" role="dialog" aria-modal="true" aria-labelledby="listNameTitle">
+    <header class="dialog-head"><h2 id="listNameTitle">Nueva lista</h2><button class="close" id="listNameClose" type="button" aria-label="Cerrar">×</button></header>
+    <form id="listNameForm" class="simple-form">
+      <label>Nombre de la lista<input id="listNameInput" type="text" required maxlength="60" placeholder="Ej. Próximo pedido" autocomplete="off"></label>
+      <div class="msg" id="listNameMessage" role="status"></div>
+      <footer class="dialog-footer"><button class="btn subtle" type="button" id="listNameCancel">Cancelar</button><button class="btn primary" type="submit" id="listNameSubmit">Guardar</button></footer>
+    </form>
+  </section>
+</div>
+<div class="overlay hidden" id="listAddOverlay">
+  <section class="dialog list-add-dialog" role="dialog" aria-modal="true" aria-labelledby="listAddTitle">
+    <header class="dialog-head"><h2 id="listAddTitle">Añadir a Mis Listas</h2><button class="close" id="listAddClose" type="button" aria-label="Cerrar">×</button></header>
+    <form id="listAddForm" class="simple-form">
+      <div class="list-add-scroll">
+        <label>Lista de destino<select id="listAddTarget" required></select></label>
+        <div class="list-add-two"><label>Catálogo de origen<select id="listAddInventory" required></select></label>
+        <label>Recambio<select id="listAddArticle" required></select></label></div>
+        <div id="listAddPreview" class="list-add-preview hidden">
+          <div class="list-add-photo"><img id="listAddPhoto" class="hidden" alt="Fotografía del recambio"><span id="listAddNoPhoto">Sin fotografía</span></div>
+          <div class="list-add-preview-text"><strong id="listAddPieceTitle"></strong><small id="listAddPieceRef"></small><small id="listAddPieceBrand"></small></div>
+        </div>
+        <div class="list-add-shop-title">Página web donde comprarás la pieza</div>
+        <p class="list-add-shop-hint">Selecciona la tienda concreta. Se guardará en la lista junto con la foto y la cantidad.</p>
+        <div id="listAddShops" class="list-add-shops" role="radiogroup" aria-label="Tienda para este recambio"></div>
+        <label>Cantidad a comprar<input id="listAddQuantity" type="number" min="1" max="100000" step="1" value="1" required></label>
+        <div class="msg" id="listAddMessage" role="status"></div>
+      </div>
+      <footer class="dialog-footer"><button class="btn subtle" type="button" id="listAddCancel">Cancelar</button><button class="btn primary" type="submit" id="listAddSubmit">Añadir a la lista</button></footer>
+    </form>
   </section>
 </div>
 

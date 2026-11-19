@@ -1,4 +1,4 @@
-"""Recambios Windows V0.2.6 (WebView2) - lanzador nativo y servidor local.
+"""Recambios Windows V0.2.8 (WebView2) - lanzador nativo y servidor local.
 
 Se instala mediante PyInstaller --onedir y utiliza pywebview con el motor
 WebView2. No depende de abrir ni tener instalado Microsoft Edge o Chrome.
@@ -143,7 +143,7 @@ def main() -> None:
     if sys.platform != 'win32':
         raise RuntimeError('Este lanzador es exclusivo de Windows.')
     setup_logging()
-    log_startup("INICIO Recambios V0.2.6")
+    log_startup("INICIO Recambios V0.2.8")
     if not webview2_installed():
         message('Falta Microsoft Edge WebView2 Runtime.\n\n'
                 'Instálalo desde la página oficial de Microsoft y vuelve a abrir Recambios:\n'

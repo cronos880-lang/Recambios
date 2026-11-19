@@ -21,3 +21,53 @@
 .restore-controls input{min-width:175px;flex:1;padding:9px 10px;margin:0!important}
 .restore-info{font-size:11px;color:#b5c4d5;line-height:1.6}
 .restore-warning{font-size:11px;color:#f1b4ac;line-height:1.5}
+
+/* V0.2.7 de pruebas — Mis Listas */
+.main-tabs{display:flex;align-items:center;gap:3px;background:#101722;border:1px solid #303e51;border-radius:9px;padding:3px;flex:none;margin-left:10px}
+.main-tab{background:transparent;border:0;color:#99adbf;padding:9px 13px;border-radius:6px;font-size:12px;font-weight:700;white-space:nowrap}
+.main-tab.active{color:#e5f3ff;background:#274568}.main-tab:hover{color:white;background:#263750}
+.shopping-sidebar{padding-top:23px}.list-title-row{display:flex;justify-content:space-between;align-items:center;gap:12px}.list-title-row strong{font-size:17px}
+.shopping-sidebar-footer{font-size:11px;color:#7891a9;padding-top:14px;border-top:1px solid #30394b}
+.shopping-list-nav{margin-top:4px}.shopping-list-btn{width:100%;background:#1f2a3b;border:1px solid #354357;border-radius:10px;color:#eaf4ff;text-align:left;padding:15px;margin-bottom:9px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.shopping-list-btn:hover{background:#263850}.shopping-list-btn.active{background:#1e3954;border-color:#4d84b4}.shopping-list-btn strong{display:block;font-size:13px}.shopping-list-btn small{display:block;color:#9eb1c7;font-size:11px;margin-top:5px}.shopping-list-btn .shopping-pill{border:1px solid #436179;border-radius:12px;padding:5px 9px;font-size:10px;white-space:nowrap;color:#b2d3ed}
+.shopping-content{padding-top:30px}.shopping-detail-header{display:flex;align-items:center;justify-content:space-between;gap:16px}.shopping-detail-header h2{margin:8px 0 7px;font-size:26px}.shopping-detail-actions{display:flex;gap:8px;flex-wrap:wrap}.shopping-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-top:1px solid #30394b;border-bottom:1px solid #30394b;padding:16px 0;margin:23px 0}.shopping-muted{font-size:11px;color:#93a7bf}.shopping-lines{display:grid;gap:12px}.shopping-line{display:flex;gap:14px;background:#192431;border:1px solid #314256;padding:14px;border-radius:12px;align-items:flex-start}.shopping-line-photo{width:85px;height:82px;background:#fff;border-radius:9px;flex:none;display:grid;place-items:center;overflow:hidden;color:#8a95a5}.shopping-line-photo img{width:100%;height:100%;object-fit:contain}.shopping-line-main{flex:1;min-width:0}.shopping-line-main strong{font-size:13px;line-height:1.5}.shopping-line-main small{color:#a5b9ca;display:block;margin:6px 0;font-size:11px}.shopping-line-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:11px}.shopping-line-links a{font-size:11px;color:#8bc6ff;text-decoration:none}.shopping-line-links a:hover{text-decoration:underline}.shopping-line-controls{display:flex;align-items:flex-end;flex-direction:column;gap:10px}.shopping-line-controls label{font-size:10px;color:#99aec5;text-align:right}.shopping-line-controls input{display:block;max-width:82px;margin-top:5px;text-align:center;background:#101a26;border:1px solid #4a617c;border-radius:7px;color:white;padding:8px 4px;font-size:13px}.shopping-line-controls .btn{padding:6px 10px}
+.small-dialog{width:min(100%,490px)}.small-dialog .dialog-head h2{font-size:19px}.simple-form{display:grid;gap:15px;padding:22px}.simple-form label{font-size:12px;font-weight:650;color:#acc3da}.simple-form input,.simple-form select{display:block;margin-top:8px;width:100%;color:#ecf4ff;background:#111b2a;border:1px solid #45627e;padding:11px 12px;border-radius:7px}.simple-form .dialog-footer{margin:0 -22px -22px;padding:15px 22px}
+@media(max-width:1130px){.main-tabs{margin-left:0}.main-tab{padding:8px 8px;font-size:11px}.toolbar{gap:10px}.brand-icon{display:none}.toolbar-counter{display:none}.shopping-detail-header{align-items:flex-start;flex-direction:column}}
+@media(max-width:1080px){
+  .toolbar{height:auto;min-height:72px;flex-wrap:wrap;padding:10px 14px;row-gap:7px}
+  .toolbar-actions{gap:6px}
+  .shopping-line{flex-wrap:wrap}
+  .shopping-line-controls{margin-left:auto;flex-direction:row;align-items:center}
+}
+
+/* V0.2.8 PRUEBAS — elegir tienda y ver foto antes de añadir a Mis Listas. */
+.list-add-dialog{width:min(100%,800px)}
+.list-add-dialog form{padding:0;gap:0}
+.list-add-dialog .list-add-scroll{display:grid;gap:15px;padding:21px 24px;overflow:auto;min-height:0}
+.list-add-dialog .dialog-footer{margin:0;padding:15px 24px;flex:none}
+.list-add-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:13px}
+.list-add-preview{display:flex;gap:16px;background:#13202e;border:1px solid #3c526a;padding:12px;border-radius:11px;min-height:134px;align-items:center}
+.list-add-photo{width:132px;height:115px;flex:none;display:grid;place-items:center;background:white;border-radius:9px;overflow:hidden;color:#657384;font-size:11px}
+.list-add-photo img{width:100%;height:100%;object-fit:contain}
+.list-add-preview-text{min-width:0;display:grid;gap:7px}
+.list-add-preview-text strong{font-size:15px;line-height:1.45;color:#e9f5ff}
+.list-add-preview-text small{font-size:11px;color:#9db3c8;line-height:1.4}
+.list-add-shop-title{font-size:13px;font-weight:750;color:#d7e8fb}
+.list-add-shop-hint{font-size:11px;color:#9aadc4;margin:-10px 0 0;line-height:1.5}
+.list-add-shops{display:grid;gap:8px}
+.list-add-shop-row{display:flex;gap:12px;align-items:center;background:#111b29;border:1px solid #40556e;border-radius:9px;padding:11px 13px}
+.list-add-shop-row:has(input:checked){border-color:#5795ce;background:#1b3149}
+.list-add-shop-choice{display:flex!important;align-items:center;gap:12px;flex:1;min-width:0;margin:0!important;cursor:pointer}
+.list-add-shop-choice input{flex:none!important;width:18px!important;height:18px!important;margin:0!important;accent-color:#459ada}
+.list-add-shop-info{display:grid;min-width:0;gap:6px}
+.list-add-shop-info strong{font-size:12px;color:#eaf4ff}
+.list-add-shop-url{font-size:10px;color:#95b8d9;overflow-wrap:anywhere;font-weight:400}
+.list-add-shop-open{font-size:11px;color:#8dc8fd;text-decoration:none;flex:none}
+.list-add-shop-open:hover{text-decoration:underline}
+.list-add-no-shops{margin:0;font-size:11px;color:#e5c695;padding:13px;background:#2c2830;border-radius:8px}
+.shopping-line-chosen{display:grid;gap:5px;margin-top:10px;background:#142b3a;border:1px solid #34556b;border-radius:9px;padding:10px 12px;overflow-wrap:anywhere}
+.shopping-line-chosen-label{font-size:9px;color:#a2c5dd;font-weight:700;letter-spacing:.5px}
+.shopping-line-chosen a{font-size:13px;color:#9cd5ff;text-decoration:none;width:fit-content}
+.shopping-line-chosen a:hover{text-decoration:underline}
+.shopping-line-chosen small{font-size:10px;margin:0;color:#a6bcd1;overflow-wrap:anywhere}
+@media(max-width:690px){.list-add-two{grid-template-columns:1fr}.list-add-shop-row{flex-wrap:wrap}}

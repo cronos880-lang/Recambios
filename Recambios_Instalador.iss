@@ -1,9 +1,9 @@
 #define MyAppName "Recambios"
-#define MyAppVersion "0.2.6"
+#define MyAppVersion "0.2.8"
 #define MyAppExeName "Recambios.exe"
 
 [Setup]
-; Conserva el AppId de las versiones anteriores para actualizar en el mismo lugar.
+; Conserva exactamente el AppId de V0.2.6: misma instalación y datos del usuario fuera de {app}.
 AppId={{B874EAAE-F55C-4324-BDE2-05F54E782D47}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -14,7 +14,7 @@ PrivilegesRequired=lowest
 ArchitecturesAllowed=x64
 UsePreviousAppDir=yes
 OutputDir=salida_instalador
-OutputBaseFilename=Recambios_Instalador_V0_2_6_WebView2_Maximizado_Restauracion_Windows
+OutputBaseFilename=Recambios_Instalador_V0_2_8_Windows
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern

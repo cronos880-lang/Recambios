@@ -1,4 +1,4 @@
-RECAMBIOS V0.2.6 — INSTALADOR WINDOWS CON WEBVIEW2
+RECAMBIOS V0.2.8 — INSTALADOR WINDOWS CON WEBVIEW2
 ===================================================
 
 ENTREGA: CODIGO FUENTE COMPLETO + PREPARACION PARA COMPILAR EN WINDOWS.
@@ -40,7 +40,7 @@ No modifica ni utiliza la Suite Visor_Vector.
    y comprueba su firma digital antes de incluirlo en el instalador.
 6) Inno Setup prepara el instalador en:
 
-   salida_instalador\Recambios_Instalador_V0_2_6_WebView2_Maximizado_Restauracion_Windows.exe
+   salida_instalador\Recambios_Instalador_V0_2_8_Windows.exe
 
    También queda el ejecutable portable en:
    dist\Recambios\Recambios.exe
@@ -114,9 +114,9 @@ B) SI USABAS LA VERSION PORTATIL CON .BAT:
 - La versión 0.2.3 exponía la ventana WinForms al puente JavaScript de
   pywebview mediante un atributo público; eso puede provocar recursión y
   bloquear la aplicación antes de cargar la pantalla.
-- V0.2.6 utiliza un atributo privado y restringe las propiedades del puente.
+- V0.2.8 utiliza un atributo privado y restringe las propiedades del puente.
 - Al actualizar NO se borra Datos ni el perfil WebView2 existente.
-- Antes de instalar V0.2.6, CIERRA V0.2.3 (si está bloqueada, finaliza
+- Antes de instalar V0.2.8, CIERRA V0.2.3 (si está bloqueada, finaliza
   "Recambios.exe" desde el Administrador de tareas de Windows).
 - Si persiste la lentitud, envía los archivos de registro
   %LOCALAPPDATA%\Recambios\arranque.log y errores.log.
@@ -140,13 +140,13 @@ NOTA: esta entrega ha sido comprobada por inspección y con pruebas de API
 local en Linux; la creación real del .exe, el instalador, la comprobación de
 WebView2 y el funcionamiento gráfico nativo requieren ejecución en Windows.
 
-NOVEDAD V0.2.6
+NOVEDAD V0.2.8
 - El arranque limpio no crea «Pro10» ni ningún otro inventario.
 - El usuario crea y da nombre al primero.
 - Las actualizaciones conservan los inventarios de versiones anteriores.
   Desinstalar/reinstalar no borra automáticamente AppData\Local\Recambios\Datos.
 
-NOVEDADES V0.2.6
+NOVEDADES V0.2.8
 ----------------
 - La ventana de Recambios se abre maximizada (no pantalla completa).
 - Al importar un ZIP se mantienen los nombres originales.
@@ -157,3 +157,11 @@ NOVEDADES V0.2.6
 - No se mezclan datos de inventarios distintos ni se añade (recuperado).
 - Los inventarios existentes y fotografías se conservan en las actualizaciones.
 - No se ha probado el EXE nativo en Windows dentro de este entorno.
+
+10. MIS LISTAS EN V0.2.8
+-----------------------
+Se incluyen listas de compra separadas de los inventarios, cantidades,
+fotografías y selección de tiendas. El ZIP de copia incorpora también listas.
+El instalador conserva la carpeta de datos utilizada por V0.2.6;
+los datos de pruebas están separados y se migran mediante copia ZIP.
+Consulta GUIA_CAMBIO_V026_A_V028.txt antes de desinstalar.

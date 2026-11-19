@@ -1,30 +1,16 @@
-RECAMBIOS V0.2.6 — PROGRAMA INDEPENDIENTE
-=========================================
+RECAMBIOS V0.2.8 — PROGRAMA COMPLETO PARA WINDOWS
 
-Para crear el instalador Windows con ventana WebView2, utiliza:
-   CREAR_INSTALADOR_WINDOWS.bat
-Y sigue las instrucciones detalladas de LEEME_INSTALADOR_WINDOWS.txt.
+Versión más reciente entregada; compilación Windows pendiente de ejecutar en el PC.
+Base técnica: V0.2.6 instalada; incorpora las funciones de Mis Listas de V0.2.7 y selección de tienda/fotografía de V0.2.8.
 
-Este ZIP contiene también el programa portátil con Iniciar_Recambios.bat
-(que utiliza Python y navegador), únicamente como método alternativo de prueba.
-El programa INSTALADO abre una ventana propia WebView2 sin pestañas.
+El paquete incluye el código completo y CREAR_INSTALADOR_WINDOWS.bat para crear el EXE instalable.
+Lee primero GUIA_CAMBIO_V026_A_V028.txt, especialmente su sección de copias de seguridad.
 
-No modifica ni utiliza Suite Visor_Vector.
-Mantiene los inventarios, piezas, fotos, referencias, enlaces, copia y
-restauración de seguridad, y preparado para control de cantidades futuro.
-Los datos del programa instalado se guardan en %LOCALAPPDATA%\Recambios\Datos\.
+No contiene inventarios de ejemplo, no cambia el catálogo por añadir piezas a listas y no elimina datos existentes.
 
-NOVEDAD V0.2.6 — INICIO SIN INVENTARIOS
-- Una instalación completamente nueva empieza sin ningún inventario, ni Pro10.
-- En el primer arranque se abre la gestión de inventarios, donde escribir un
-  nombre y pulsar «Crear inventario». No se crea nada automáticamente.
-- Se pueden crear varios inventarios y eliminar incluso el último.
-- Si actualizas una instalación que ya tiene inventarios, NO se borran.
-  Para empezar desde cero debes eliminarlos explícitamente desde el gestor
-  o iniciar la instalación usando otra carpeta de datos.
+Carpeta de datos de la aplicación instalada:
+  %LOCALAPPDATA%\Recambios\Datos
+Carpeta de datos de pruebas portátiles anteriores:
+  %LOCALAPPDATA%\Recambios_Pruebas\Datos
 
-NOVEDADES V0.2.6
-- La ventana de WebView2 abre maximizada.
-- Recuperar ZIP respeta nombres originales; en coincidencias exige elegir
-  Sobrescribir (con copia preventiva) o Cambiar nombre.
-- No se borran inventarios de una instalación anterior al actualizar.
+La V0.2.8 usa la PRIMERA carpeta. La segunda NO se mezcla automáticamente.

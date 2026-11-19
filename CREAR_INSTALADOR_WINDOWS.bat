@@ -1,11 +1,11 @@
 @echo off
 setlocal EnableExtensions
 cd /d "%~dp0"
-title Crear instalador Recambios V0.2.6 WebView2
+title Crear instalador Recambios V0.2.8 WebView2
 
 echo.
 echo ==================================================
-echo         RECAMBIOS V0.2.6 - WEBVIEW2
+echo         RECAMBIOS V0.2.8 - WEBVIEW2
 echo       CREAR INSTALADOR EN TU WINDOWS
 echo ==================================================
 echo.
@@ -54,14 +54,14 @@ if not defined ISCC goto sin_inno
 echo [5/5] Creando instalador con comprobacion de WebView2...
 "%ISCC%" "Recambios_Instalador.iss"
 if errorlevel 1 goto error_build
-if not exist "salida_instalador\Recambios_Instalador_V0_2_6_WebView2_Maximizado_Restauracion_Windows.exe" goto error_build
+if not exist "salida_instalador\Recambios_Instalador_V0_2_8_Windows.exe" goto error_build
 
 echo.
 echo ================================================
 echo  INSTALADOR CREADO CORRECTAMENTE
 echo ================================================
 echo.
-echo  salida_instalador\Recambios_Instalador_V0_2_6_WebView2_Maximizado_Restauracion_Windows.exe
+echo  salida_instalador\Recambios_Instalador_V0_2_8_Windows.exe
 echo.
 echo  No requiere Python para usar el programa instalado.
 echo  No requiere tener Edge ni Chrome instalados.

@@ -1,0 +1,74 @@
+RECAMBIOS — INSTALAR V0.2.8 DESDE V0.2.6 SIN PERDER DATOS
+=========================================================
+
+ESTADO DE LA ENTREGA
+Código fuente completo para generar un instalador Windows con Inno Setup 6 y PyInstaller.
+No hay un ejecutable compilado y verificado en Windows incluido en este ZIP.
+
+CARPETAS IMPORTANTES
+Datos de versión instalada:   %LOCALAPPDATA%\Recambios\Datos
+Datos de pruebas portátiles: %LOCALAPPDATA%\Recambios_Pruebas\Datos
+Código del programa:        %LOCALAPPDATA%\Programs\Recambios
+
+1) ANTES DE DESINSTALAR, ABRE RECAMBIOS V0.2.6 Y HAZ UNA COPIA ZIP
+   Haz clic en «Copia de seguridad» y guarda el archivo FUERA de Recambios,
+   por ejemplo, en Documentos. Comprueba que exista el ZIP.
+   Cierra Recambios. Conserva también, si es posible, copia manual de
+   %LOCALAPPDATA%\Recambios\Datos con el programa cerrado.
+
+2) SI CREASTE LISTAS EN LA VERSIÓN DE PRUEBA V0.2.8, HAZ OTRA COPIA
+   Abre la prueba, elige «Copia de seguridad», guarda OTRO ZIP en Documentos
+   con un nombre diferente. Cierra la prueba.
+   No borres %LOCALAPPDATA%\Recambios_Pruebas\Datos.
+
+3) CREAR EL INSTALADOR EN WINDOWS
+   Descomprime ESTE ZIP completo en una carpeta nueva.
+   Ejecuta CREAR_INSTALADOR_WINDOWS.bat. Necesitas Python 3.11/3.12
+   de 64 bits e Inno Setup 6 solo para compilar. Se crea un entorno
+   aislado .build_venv. Requiere Internet para descargar dependencias
+   y WebView2 Runtime oficial.
+   Al terminar correctamente encontrarás:
+   salida_instalador\Recambios_Instalador_V0_2_8_Windows.exe
+
+4) DESINSTALAR V0.2.6 (SI DESEAS DESINSTALAR ANTES)
+   Windows > Configuración > Aplicaciones > Aplicaciones instaladas > Recambios
+   > Desinstalar. NO borres a mano la carpeta de datos.
+   El desinstalador de Inno elimina archivos del programa, NO la carpeta
+   %LOCALAPPDATA%\Recambios\Datos.
+   Si prefieres, también puedes instalar V0.2.8 encima de V0.2.6:
+   conserva el mismo AppId de Inno y reutiliza la misma carpeta de datos.
+
+5) INSTALAR V0.2.8
+   Ejecuta el instalador compilado de V0.2.8.
+   El instalador comprobará WebView2 Runtime; puede necesitar Internet.
+   Abre Recambios desde el menú Inicio. Deben aparecer tus catálogos
+   previos de %LOCALAPPDATA%\Recambios\Datos.
+   Se añadirán las tablas de listas sin vaciar los datos existentes.
+   Si faltan catálogos, NO importes ni sobrescribas precipitadamente: 
+   cierra la app y comprueba la carpeta de datos y los ZIP de seguridad.
+
+6) SI QUIERES RECUPERAR LAS LISTAS DE LA PRUEBA
+   Si la prueba ya contiene listas, la versión instalada NO las lee sola:
+   usa «Inventarios» > «Cargar copia guardada (.zip)» y selecciona el
+   ZIP de la prueba. Puedes recuperar los inventarios y las listas.
+   Para nombres duplicados, el programa ofrece renombrar o sobrescribir.
+   ATENCIÓN: sobrescribir un inventario sustituye sus recambios;
+   sobrescribir una lista sustituye sus elementos.
+   Comprueba los nombres y elige CAMBIAR NOMBRE si no quieres sustituirlos.
+
+7) VERIFICAR
+   Revisa al menos un catálogo con fotos y enlaces, las listas y
+   cantidades; prueba crear una copia ZIP completa.
+   Conserva ambas copias antiguas hasta dar por validada V0.2.8 en Windows.
+
+SI DEBES VOLVER A V0.2.6
+   1. Conserva ZIP de seguridad de V0.2.8 y cierra Recambios.
+   2. NO abras V0.2.6 sobre una base de datos sin copia: no soporta
+      exportar Mis Listas. Restaura la copia antigua V0.2.6 o crea
+      un entorno separado para esa versión.
+   3. Conserva los ZIP y datos originales; no borres carpetas manualmente.
+
+SEGURIDAD
+   La firma digital del programa no está incluida: Windows puede mostrar
+   advertencias SmartScreen. No desactives Defender para instalarlo.
+   No se genera ni modifica ningún componente de la Suite de Programas.
