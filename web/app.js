@@ -663,6 +663,103 @@ Antes se creará una copia de seguridad. ¿Confirmas?`)) return;
     } catch (err) { alert(err.message); }
   }
 
+  // El select nativo de Windows no puede mostrar fotografías al pasar el ratón.
+  // Este desplegable se limita a la elección del recambio: el catálogo no se modifica.
+  let visibleAddArticles = [], activeAddOption = 0;
+
+  function showHoveredArticle(article) {
+    $('listAddHoverTitle').textContent = article?.titulo || 'No hay recambios con ese texto';
+    $('listAddHoverRef').textContent = article ? [article.marca, article.referencia ? 'Ref. ' + article.referencia : '', article.referencia_tienda ? 'Tienda: ' + article.referencia_tienda : ''].filter(Boolean).join(' · ') : '';
+    $('listAddHoverPhoto').classList.toggle('hidden', !article?.foto_url);
+    $('listAddHoverEmpty').classList.toggle('hidden', !!article?.foto_url);
+    if (article?.foto_url) $('listAddHoverPhoto').src = article.foto_url;
+    else $('listAddHoverPhoto').removeAttribute('src');
+  }
+
+  function positionAddArticlePopup() {
+    const popup = $('listAddArticlePopup');
+    if (popup.classList.contains('hidden')) return;
+    const rect = $('listAddArticleSearch').getBoundingClientRect();
+    const width = Math.min(710, window.innerWidth - 24);
+    const left = Math.max(12, Math.min(rect.left, window.innerWidth - width - 12));
+    // El desplegable flota sobre el cuadro, evitando que lo recorte su scroll.
+    const height = Math.min(328, window.innerHeight - 24);
+    const below = window.innerHeight - rect.bottom - 12;
+    const top = below >= Math.min(height, 245) || below >= rect.top - 12
+      ? rect.bottom + 5 : Math.max(12, rect.top - height - 5);
+    popup.style.left = left + 'px';
+    popup.style.top = top + 'px';
+    popup.style.width = width + 'px';
+    popup.style.maxHeight = Math.max(100, window.innerHeight - top - 12) + 'px';
+  }
+
+  function closeAddArticlePopup() {
+    $('listAddArticlePopup').classList.add('hidden');
+    $('listAddArticleSearch').setAttribute('aria-expanded', 'false');
+    $('listAddArticleSearch').removeAttribute('aria-activedescendant');
+    const chosen = listAddArticles.find(a => String(a.id) === $('listAddArticle').value);
+    $('listAddArticleSearch').value = chosen?.titulo || '';
+  }
+
+  function paintAddArticleOptions(query = '') {
+    const text = query.trim().toLocaleLowerCase();
+    visibleAddArticles = listAddArticles.filter(a => [a.titulo, a.marca, a.referencia, a.referencia_tienda].some(v => String(v || '').toLocaleLowerCase().includes(text)));
+    const results = $('listAddArticleOptions'); results.replaceChildren();
+    activeAddOption = 0;
+    if (!visibleAddArticles.length) {
+      results.append(textNode('div', listAddArticles.length ? 'No hay recambios que coincidan.' : 'Este catálogo está vacío.', 'list-add-no-matches'));
+      showHoveredArticle(null);
+      return;
+    }
+    visibleAddArticles.forEach((a, index) => {
+      const option = document.createElement('button');
+      option.type = 'button'; option.className = 'list-add-article-option';
+      option.setAttribute('role', 'option'); option.id = 'listAddArticleOption' + a.id;
+      option.setAttribute('aria-selected', String(a.id) === $('listAddArticle').value ? 'true' : 'false');
+      const thumbnail = document.createElement('span'); thumbnail.className = 'list-add-option-thumb';
+      if (a.foto_url) {
+        const img = document.createElement('img'); img.src = a.foto_url; img.alt = ''; img.loading = 'lazy'; thumbnail.append(img);
+      } else thumbnail.textContent = '▧';
+      const description = document.createElement('span'); description.className = 'list-add-option-description';
+      description.append(textNode('strong', a.titulo));
+      description.append(textNode('small', [a.marca, a.referencia ? 'Ref. ' + a.referencia : ''].filter(Boolean).join(' · ')));
+      option.append(thumbnail, description);
+      option.addEventListener('mouseenter', () => { activeAddOption = index; highlightAddArticleOption(); showHoveredArticle(a); });
+      option.addEventListener('focus', () => { activeAddOption = index; highlightAddArticleOption(); showHoveredArticle(a); });
+      option.addEventListener('click', () => selectAddArticle(a.id));
+      results.append(option);
+    });
+    const selectedIndex = visibleAddArticles.findIndex(a => String(a.id) === $('listAddArticle').value);
+    activeAddOption = selectedIndex >= 0 ? selectedIndex : 0;
+    highlightAddArticleOption();
+    showHoveredArticle(visibleAddArticles[activeAddOption]);
+  }
+
+  function highlightAddArticleOption(scroll = false) {
+    const children = $('listAddArticleOptions').querySelectorAll('[role="option"]');
+    children.forEach((element, i) => element.classList.toggle('hovered', i === activeAddOption));
+    const focused = children[activeAddOption];
+    if (focused) {
+      $('listAddArticleSearch').setAttribute('aria-activedescendant', focused.id);
+      if (scroll) focused.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  function openAddArticlePopup() {
+    if (!listAddArticles.length) return;
+    $('listAddArticlePopup').classList.remove('hidden');
+    $('listAddArticleSearch').setAttribute('aria-expanded', 'true');
+    $('listAddArticleSearch').value = '';
+    paintAddArticleOptions();
+    positionAddArticlePopup();
+  }
+
+  function selectAddArticle(id) {
+    $('listAddArticle').value = String(id);
+    renderAddArticlePreview();
+    closeAddArticlePopup();
+  }
+
   // Fotografía y webs guardadas en el catálogo: siempre visibles antes de elegir.
   function renderAddArticlePreview() {
     const pieceId = Number($('listAddArticle').value);
@@ -703,7 +800,9 @@ Antes se creará una copia de seguridad. ¿Confirmas?`)) return;
   async function updateAddArticleSelect(selectedId = null) {
     const serial = ++listAddFetchSerial;
     const invId = Number($('listAddInventory').value);
+    closeAddArticlePopup();
     const select = $('listAddArticle'); select.replaceChildren(); listAddArticles = [];
+    $('listAddArticleSearch').value = '';
     renderAddArticlePreview();
     if (!invId) return;
     const response = await fetch('/api/articulos?inventario_id=' + encodeURIComponent(invId), { cache: 'no-store' });
@@ -715,6 +814,7 @@ Antes se creará una copia de seguridad. ¿Confirmas?`)) return;
     if (selectedId && [...select.options].some(opt => Number(opt.value) === selectedId)) select.value = String(selectedId);
     if (!select.options.length) setMessage('listAddMessage', 'No hay recambios en ese catálogo. Elige otro.', 'error');
     renderAddArticlePreview();
+    $('listAddArticleSearch').value = listAddArticles.find(a => String(a.id) === select.value)?.titulo || '';
   }
 
   async function openListAdd(fromCatalog = false) {
@@ -733,6 +833,7 @@ Antes se creará una copia de seguridad. ¿Confirmas?`)) return;
     if (!inventories.length) { alert('Primero debes crear un catálogo y guardar recambios.'); return; }
     $('listAddInventory').value = String(activeInventoryId || inventories[0].id);
     $('listAddQuantity').value = '1';
+    closeAddArticlePopup();
     $('listAddOverlay').classList.remove('hidden');
     await updateAddArticleSelect(fromCatalog ? selected : null);
   }
@@ -754,6 +855,7 @@ Antes se creará una copia de seguridad. ¿Confirmas?`)) return;
         setMessage('listAddMessage', 'Elige la web donde comprarás este recambio.', 'error'); return;
       }
       await api('/api/listas/anadir', { lista_id, inventario_id, articulo_id, cantidad, url_compra });
+      closeAddArticlePopup();
       $('listAddOverlay').classList.add('hidden');
       currentListId = lista_id;
       await loadShoppingLists(lista_id);
@@ -776,9 +878,45 @@ Antes se creará una copia de seguridad. ¿Confirmas?`)) return;
   $('listNameCancel').addEventListener('click', closeListName);
   $('listNameForm').addEventListener('submit', submitListName);
   $('listAddInventory').addEventListener('change', () => updateAddArticleSelect().catch(err => setMessage('listAddMessage', err.message, 'error')));
-  $('listAddArticle').addEventListener('change', renderAddArticlePreview);
-  $('listAddClose').addEventListener('click', () => $('listAddOverlay').classList.add('hidden'));
-  $('listAddCancel').addEventListener('click', () => $('listAddOverlay').classList.add('hidden'));
+  $('listAddArticleSearch').addEventListener('focus', openAddArticlePopup);
+  $('listAddArticleSearch').addEventListener('click', () => {
+    if ($('listAddArticlePopup').classList.contains('hidden')) openAddArticlePopup();
+  });
+  $('listAddArticleSearch').addEventListener('input', () => {
+    const query = $('listAddArticleSearch').value;
+    if ($('listAddArticlePopup').classList.contains('hidden')) openAddArticlePopup();
+    $('listAddArticleSearch').value = query;
+    paintAddArticleOptions(query);
+  });
+  $('listAddArticleToggle').addEventListener('click', () => {
+    if ($('listAddArticlePopup').classList.contains('hidden')) {
+      $('listAddArticleSearch').focus();
+    } else { closeAddArticlePopup(); }
+  });
+  $('listAddArticleSearch').addEventListener('keydown', ev => {
+    if (ev.key === 'Escape') { closeAddArticlePopup(); ev.preventDefault(); return; }
+    if (ev.key === 'Tab') { closeAddArticlePopup(); return; }
+    if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+      ev.preventDefault();
+      if ($('listAddArticlePopup').classList.contains('hidden')) { openAddArticlePopup(); return; }
+      if (!visibleAddArticles.length) return;
+      activeAddOption = (activeAddOption + (ev.key === 'ArrowDown' ? 1 : -1) + visibleAddArticles.length) % visibleAddArticles.length;
+      highlightAddArticleOption(true);
+      showHoveredArticle(visibleAddArticles[activeAddOption]);
+    } else if (ev.key === 'Enter' && !$('listAddArticlePopup').classList.contains('hidden')) {
+      ev.preventDefault();
+      if (visibleAddArticles[activeAddOption]) selectAddArticle(visibleAddArticles[activeAddOption].id);
+    }
+  });
+  document.addEventListener('pointerdown', ev => {
+    if (!$('listAddArticlePopup').classList.contains('hidden') &&
+        !$('listAddArticlePopup').contains(ev.target) &&
+        !ev.target.closest('.list-add-combobox')) closeAddArticlePopup();
+  });
+  window.addEventListener('resize', positionAddArticlePopup);
+  $('listAddOverlay').querySelector('.list-add-scroll').addEventListener('scroll', positionAddArticlePopup);
+  $('listAddClose').addEventListener('click', () => { closeAddArticlePopup(); $('listAddOverlay').classList.add('hidden'); });
+  $('listAddCancel').addEventListener('click', () => { closeAddArticlePopup(); $('listAddOverlay').classList.add('hidden'); });
   $('listAddForm').addEventListener('submit', submitListAdd);
 
   $('search').addEventListener('input', render); $('categoryFilter').addEventListener('change', render);

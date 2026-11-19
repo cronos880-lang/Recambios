@@ -71,3 +71,31 @@
 .shopping-line-chosen a:hover{text-decoration:underline}
 .shopping-line-chosen small{font-size:10px;margin:0;color:#a6bcd1;overflow-wrap:anywhere}
 @media(max-width:690px){.list-add-two{grid-template-columns:1fr}.list-add-shop-row{flex-wrap:wrap}}
+
+/* Selector visual de recambios para Mis Listas. El catálogo permanece intacto. */
+.list-add-article-field{min-width:0}
+.list-add-article-field>label{display:block;margin-bottom:7px}
+.list-add-native-value{display:none!important}
+.list-add-combobox{display:flex;align-items:center;border:1px solid #45627e;border-radius:8px;background:#111b2a;overflow:hidden;min-height:41px}
+.list-add-combobox:focus-within{border-color:#65a1db;box-shadow:0 0 0 2px #65a1db66}
+.list-add-combobox input{min-width:0;flex:1!important;width:100%!important;margin:0!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:11px 12px!important;font-size:12px!important}
+.list-add-combobox button{color:#d5e6f7;flex:none;padding:10px 13px;border:0;border-left:1px solid #344b63;background:#1a2d41;cursor:pointer;font-size:18px}
+.list-add-combobox button:hover{background:#27425c}
+.list-add-article-popup{position:fixed;z-index:110;display:grid;grid-template-columns:minmax(0,1fr) 210px;min-height:120px;background:#152335;border:1px solid #5681a4;border-radius:10px;box-shadow:0 20px 60px #000c;overflow:hidden}
+.list-add-article-popup.hidden{display:none!important}
+.list-add-article-options{overflow-y:auto;overscroll-behavior:contain;min-height:120px;max-height:340px;padding:6px}
+.list-add-article-option{width:100%;text-align:left;display:flex;align-items:center;gap:10px;padding:7px;border:1px solid transparent;border-radius:7px;background:transparent;color:#e5f1ff;cursor:pointer;min-width:0}
+.list-add-article-option:hover,.list-add-article-option.hovered,.list-add-article-option:focus-visible{border-color:#537fa6;background:#254364;outline:none}
+.list-add-article-option[aria-selected=true]{border-left:3px solid #63a6eb}
+.list-add-option-thumb{width:54px;height:51px;flex:none;border-radius:7px;background:white;color:#718094;display:grid;place-items:center;overflow:hidden}
+.list-add-option-thumb img{width:100%;height:100%;object-fit:contain}
+.list-add-option-description{display:grid;gap:4px;min-width:0}
+.list-add-option-description strong{font-size:12px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.list-add-option-description small{font-size:10px;color:#afc5da;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list-add-hover-preview{border-left:1px solid #3c5875;background:#1c3046;padding:11px;display:flex;flex-direction:column;gap:9px;min-width:0;overflow-y:auto}
+.list-add-hover-frame{background:white;color:#617a92;border-radius:8px;height:156px;display:grid;place-items:center;overflow:hidden;flex:none;font-size:11px}
+.list-add-hover-frame img{width:100%;height:100%;object-fit:contain}
+.list-add-hover-preview strong{font-size:12px;color:#e9f4ff;line-height:1.4;overflow-wrap:anywhere}
+.list-add-hover-preview small{font-size:10px;color:#a9bfd7;line-height:1.5;overflow-wrap:anywhere}
+.list-add-no-matches{padding:20px 13px;color:#b9cee0;font-size:12px}
+@media(max-width:580px){.list-add-article-popup{grid-template-columns:minmax(0,1fr) 130px}.list-add-hover-preview{padding:8px}.list-add-hover-frame{height:110px}.list-add-option-thumb{width:42px;height:42px}}

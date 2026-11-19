@@ -147,7 +147,13 @@
       <div class="list-add-scroll">
         <label>Lista de destino<select id="listAddTarget" required></select></label>
         <div class="list-add-two"><label>Catálogo de origen<select id="listAddInventory" required></select></label>
-        <label>Recambio<select id="listAddArticle" required></select></label></div>
+        <div class="list-add-article-field"><label for="listAddArticleSearch">Recambio</label>
+          <div class="list-add-combobox">
+            <input id="listAddArticleSearch" type="text" role="combobox" aria-label="Buscar recambio" aria-autocomplete="list" aria-haspopup="listbox" aria-controls="listAddArticleOptions" aria-expanded="false" autocomplete="off" placeholder="Buscar por nombre o referencia">
+            <button id="listAddArticleToggle" type="button" aria-label="Mostrar recambios" title="Mostrar recambios">⌄</button>
+          </div>
+          <select id="listAddArticle" class="list-add-native-value" tabindex="-1" aria-hidden="true"></select>
+        </div></div>
         <div id="listAddPreview" class="list-add-preview hidden">
           <div class="list-add-photo"><img id="listAddPhoto" class="hidden" alt="Fotografía del recambio"><span id="listAddNoPhoto">Sin fotografía</span></div>
           <div class="list-add-preview-text"><strong id="listAddPieceTitle"></strong><small id="listAddPieceRef"></small><small id="listAddPieceBrand"></small></div>
@@ -161,6 +167,15 @@
       <footer class="dialog-footer"><button class="btn subtle" type="button" id="listAddCancel">Cancelar</button><button class="btn primary" type="submit" id="listAddSubmit">Añadir a la lista</button></footer>
     </form>
   </section>
+</div>
+<div id="listAddArticlePopup" class="list-add-article-popup hidden" aria-label="Seleccionar recambio">
+  <div id="listAddArticleOptions" class="list-add-article-options" role="listbox" aria-label="Recambios disponibles"></div>
+  <aside class="list-add-hover-preview" aria-live="off">
+    <div class="list-add-hover-frame"><img id="listAddHoverPhoto" class="hidden" alt=""><span id="listAddHoverEmpty">Sin fotografía</span></div>
+    <strong id="listAddHoverTitle">Pasa el ratón sobre un recambio</strong>
+    <small id="listAddHoverRef"></small>
+    <small class="list-add-hover-note">Haz clic o pulsa Intro para seleccionarlo.</small>
+  </aside>
 </div>
 
 <script src="/app.js" defer></script>
