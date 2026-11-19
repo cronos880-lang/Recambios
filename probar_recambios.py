@@ -29,6 +29,15 @@ def main() -> None:
         try:
             import recambios_windows
             if recambios_windows.webview2_installed():
+                # La ventana nativa tiene rutas internas fijas para el programa
+                # instalado. Se sustituyen TODAS antes de entrar en main().
+                # Así quedan aislados datos, logs, perfil WebView2 y mutex.
+                recambios_windows.APP_DIR = app_dir
+                recambios_windows.DATA_DIR = app_dir / 'Datos'
+                recambios_windows.INSTANCE_FILE = app_dir / 'instancia.json'
+                recambios_windows.LOG_FILE = app_dir / 'errores.log'
+                recambios_windows.STARTUP_LOG = app_dir / 'arranque.log'
+                recambios_windows.MUTEX_NAME = r'Local\\Recambios_Pruebas_Selector_Fotos'
                 print('Iniciando Recambios Pruebas en ventana WebView2...', flush=True)
                 recambios_windows.main()
                 return
