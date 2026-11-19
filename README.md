@@ -1,28 +1,39 @@
-# Recambios V0.2.6 — código fuente para Windows
+# Recambios — última entrega V0.2.8 (Mis Listas)
 
-Versión principal V0.2.6, instalada y probada en Windows por el propietario. Proyecto en desarrollo activo; pueden existir actualizaciones posteriores.
+Esta rama (`desarrollo-v0.2.8-mis-listas`) contiene la **V0.2.8 más reciente**, con todo lo necesario para **generar el instalador en Windows**. La rama `main` conserva la V0.2.6 estable y recuperable.
 
-Este repositorio contiene **solo el código fuente, la interfaz y los scripts necesarios para preparar el instalador**. No contiene inventarios personales, fotografías de piezas ni copias ZIP de datos.
+**[Descargar V0.2.8 COMPLETA — proyecto para instalador Windows](https://github.com/cronos880-lang/Recambios/blob/desarrollo-v0.2.8-mis-listas/entregas/Recambios_V0_2_8_COMPLETA_Instalador_Windows.zip?raw=true)**
 
-## Estructura
+> El ZIP contiene código fuente, interfaz y scripts de compilación. No contiene un EXE precompilado: debes crear el instalador en tu ordenador Windows con `CREAR_INSTALADOR_WINDOWS.bat` (Python 3.11/3.12 x64, Inno Setup 6). El EXE resultante no tendrá firma digital. La compilación y el instalador no están validados todavía en Windows.
 
-- `inventario.py`: lógica del catálogo, servidor local y persistencia SQLite.
-- `recambios_windows.py`: ejecución independiente de Windows mediante pywebview / WebView2.
-- `web/`: interfaz HTML, CSS y JavaScript.
-- `CREAR_INSTALADOR_WINDOWS.bat`: compilación y creación del instalador para Windows.
-- `Recambios_Instalador.iss`: configuración de Inno Setup.
-- `LEEME_INSTALADOR_WINDOWS.txt`: instrucciones completas de construcción.
+## Cambios en V0.2.8
 
-## Instalación y conservación de datos
+- «Mis Listas»: crear, renombrar y eliminar listas de compra independientes del catálogo.
+- Cantidades por lista y fotografía de la pieza.
+- Elegir la tienda concreta cuando el artículo tiene varios enlaces de compra; ver foto y URL.
+- Una misma pieza puede añadirse desde tiendas diferentes; las listas nunca alteran los artículos del catálogo.
+- Copias de seguridad ZIP con catálogos, fotografías, listas y cantidades.
+- Ventana nativa WebView2 maximizada, sin abrir una pestaña de Chrome o Edge.
+- Inicio sin inventarios precreados si no hay datos previos.
 
-El programa instalado separa sus inventarios del ejecutable y documenta la ruta de datos `%LOCALAPPDATA%\Recambios\Datos`. **Antes de actualizar, exporta una copia de seguridad ZIP desde el programa**. No compartas esa copia en el repositorio.
+## Migración y desinstalación sin pérdida de datos
 
-La aplicación debe iniciar sin inventarios precreados cuando no existen datos del usuario. Si ya los hay, debe conservarlos.
+**Lee primero `GUIA_CAMBIO_V026_A_V028.txt`.**
 
-Para compilar una distribución de Windows, consulta `LEEME_INSTALADOR_WINDOWS.txt` y ejecuta el BAT de construcción en un PC Windows con los requisitos indicados. Este repositorio **no incluye el instalador EXE compilado**. Cuando se conserve y pruebe el instalador correspondiente, podrá adjuntarse por separado a una GitHub Release.
+La V0.2.8 instalada utiliza la misma ubicación de datos que V0.2.6:
 
-## Seguridad y privacidad
+`%LOCALAPPDATA%\Recambios\Datos`
 
-La publicación excluye bases de datos, fotografías, archivos de usuario y copias de seguridad. `.gitignore` ayuda a impedir subidas accidentales desde Git, pero **no protege frente a una carga manual desde el navegador**: comprueba siempre los archivos antes de confirmar una subida.
+La prueba portátil V0.2.8 guardaba en otra carpeta:
 
-No se ha modificado el programa original para preparar esta copia de código.
+`%LOCALAPPDATA%\Recambios_Pruebas\Datos`
+
+La carpeta de pruebas **no se incorpora automáticamente**: exporta un ZIP desde ella si quieres importar sus listas. Antes de desinstalar la V0.2.6, haz su copia ZIP y guárdala fuera de la carpeta del programa. No borres ninguna carpeta `Datos`.
+
+Se conserva el `AppId` de Inno Setup de V0.2.6, por lo que también puedes instalar la nueva versión encima de la antigua sin desinstalar. El instalador **no borra los datos** del usuario.
+
+## Estado y seguridad
+
+Versión: **V0.2.8 desarrollada y publicada como código instalable**. Pruebas automáticas de Python, JavaScript, SQLite y copias ZIP satisfactorias. **Pendiente de comprobar la compilación real y el funcionamiento del instalador en Windows**; la publicación no equivale a aprobación oficial del usuario.
+
+No hay inventarios personales, fotografías ni bases de datos de usuario incluidos en el repositorio. Ninguna aplicación de la Suite de Programas ha sido modificada.
